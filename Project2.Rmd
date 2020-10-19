@@ -1,0 +1,62 @@
+---
+title: "ProjectWeek2"
+author: "Michael"
+date: "10/19/2020"
+output: html_document
+---
+## Creating a map with Leaflet
+
+### Assignment
+
+- Create a web page using R Markdown that features a map created with Leaflet.
+
+- Host your webpage on either GitHub Pages, RPubs, or NeoCitie
+
+```{r setup, echo=TRUE}
+# Load the packages requered
+library(leaflet)
+library(htmltools)
+```
+
+### Load the data 
+
+Get the .csv file to your R markdown.
+In this case, it is the register of urban gardens in Bogotá (Colombia)
+
+```{r}
+setwd("~/Documents/Documentos/Diplomados/Data Science/Module 9")
+data2<- read.csv(file = "sur2.csv", header =TRUE, sep= ';')
+```
+
+### Create a data frame to manipulate your data
+
+
+```{r, echo= TRUE}
+mapa <- data.frame(Localidad = data2$Localidad,
+                     Barrio = data2$Barrio,
+                     latitude = data2$Latitud,
+                     longitude = data2$Longitud,
+                     Nombre = data2$Nombre 
+                   )
+```
+
+## Creating the map
+
+```{r, echo=TRUE}
+Garden <- mapa %>%
+  leaflet() %>%
+  addTiles() %>%
+    addMarkers(popup=paste
+             ("<br>Barrio: ", 
+               htmlEscape(mapa$Barrio), 
+              "<br>Nombre: ", 
+               htmlEscape(mapa$Nombre), 
+              "<br>Localidad: ",
+               formatC(data2$Localidad, format = "d")
+              ) 
+            )
+```
+
+```{r, echo=TRUE, eval=TRUE}
+Garden
+````
